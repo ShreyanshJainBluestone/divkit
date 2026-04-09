@@ -1,0 +1,18 @@
+// Generated code. Do not modify.
+
+#[allow(unused_imports)]
+use serde::{Serialize, Deserialize};
+#[allow(unused_imports)]
+use crate::types::*;
+#[allow(unused_imports)]
+use crate::generated::*;
+
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(tag = "type")]
+pub enum DivTooltipMode {
+    #[serde(rename = "non_modal")]
+    DivTooltipModeNonModal(DivTooltipModeNonModal),
+    #[serde(rename = "modal")]
+    DivTooltipModeModal(DivTooltipModeModal),
+}

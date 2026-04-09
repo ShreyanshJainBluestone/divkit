@@ -1,0 +1,5 @@
+{
+    "lang": "rust",
+    "header": "// Generated code. Do not modify.\n\n#[allow(unused_imports)]\nuse serde::{Serialize, Deserialize};\n#[allow(unused_imports)]\nuse crate::types::*;\n#[allow(unused_imports)]\nuse crate::generated::*;\n\n",
+    "supertypeEntities": ["div"]
+}

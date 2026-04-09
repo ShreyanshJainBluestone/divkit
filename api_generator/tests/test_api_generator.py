@@ -14,7 +14,7 @@ except ModuleNotFoundError:
     from api_generator.schema.preprocessing.preprocessor import resolve_structure
     from api_generator.generator import generate_api
 
-# Set SHOULD_UPDATE_REFERENCES = True and run pytest to update reference files.
+# Set SHOULD_UPDATE_REFERENCES = False and run pytest to update reference files.
 SHOULD_UPDATE_REFERENCES = False
 
 TEST_SCHEMA_PATH = utils.path_divkit_test_data('test_schema')
@@ -56,6 +56,11 @@ def test_dart_generator():
                           schema_path=TEST_SCHEMA_PATH,
                           references_folder_name='dart')
 
+
+def test_rust_generator():
+    assert_test_generator(config_filename='rust_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='rust')
 
 def test_swift_generator():
     assert_test_generator(config_filename='swift_config.json',

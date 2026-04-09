@@ -1,0 +1,5 @@
+{
+    "lang": "rust",
+    "generateTemplates": true,
+    "header": "// Generated code. Do not modify.\n\nuse serde::{Serialize, Deserialize};\n"
+}

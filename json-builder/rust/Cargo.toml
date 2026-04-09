@@ -1,0 +1,11 @@
+[package]
+name = "divkit"
+version = "0.1.0"
+edition = "2021"
+description = "Backend-driven UI framework - Rust builder for DivKit JSON"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+validator = "0.18" # Required if we generated validator annotations
+url = "2.5" # Just in case we need url type validation

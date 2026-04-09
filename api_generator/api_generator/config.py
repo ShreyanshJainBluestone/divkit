@@ -14,6 +14,7 @@ class Platform(str, Enum):
 
 
 class GeneratedLanguage(str, Enum):
+    RUST = 'rust'
     SWIFT = 'swift'
     KOTLIN = 'kotlin'
     KOTLIN_DSL = 'kotlinDsl'
@@ -78,9 +79,9 @@ class Config:
             self.generate_serialization: bool = dictionary.get('generateSerialization', True)
 
             if ('generateTemplates' in dictionary or 'generateSerialization' in dictionary) and \
-                    self.lang not in [GeneratedLanguage.KOTLIN, GeneratedLanguage.SWIFT]:
+                    self.lang not in [GeneratedLanguage.KOTLIN, GeneratedLanguage.SWIFT, GeneratedLanguage.RUST]:
                 raise NotImplementedError('generateTemplates & generateSerialization flags are supported only for '
-                                          'Kotlin and Swift languages')
+                                          'Kotlin, Swift, and Rust languages')
 
             if self.generate_templates and not self.generate_serialization:
                 if 'generateTemplates' in dictionary:

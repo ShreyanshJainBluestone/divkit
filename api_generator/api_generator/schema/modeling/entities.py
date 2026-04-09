@@ -255,6 +255,8 @@ def _super_entities(config: Config.GenerationConfig, dictionary: Dict[str, any])
         GeneratedLanguage.SWIFT: 'swift_protocols',
         GeneratedLanguage.TYPE_SCRIPT: 'typescript_interfaces',
     }
+    if config.lang not in super_entities_dict:
+        return None
     super_entities_key: str = super_entities_dict[config.lang]
     if super_entities_key is None:
         raise NotImplementedError

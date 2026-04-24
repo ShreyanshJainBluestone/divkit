@@ -26,8 +26,11 @@ buildscript {
 }
 
 plugins {
+    alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.allopen) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
 
@@ -37,9 +40,8 @@ apply from: "$projectDir/version.gradle"
 
 ext {
     minSdkVersion = 21
-    compileSdkVersion = 35
-    targetSdkVersion = 35
-    buildToolsVersion = "35.0.0"
+    compileSdkVersion = 36
+    targetSdkVersion = 36
 }
 
 allprojects {
@@ -147,26 +149,6 @@ tasks.register('reportBuildNumber') {
     doLast {
         println "buildNumber $version"
     }
-}
-
-tasks.register('assembleDemoDebug') {
-    dependsOn ":divkit-demo-app:assembleDebug"
-}
-
-tasks.register('assembleDemoDebugBundle') {
-    dependsOn ":divkit-demo-app:bundleDebug"
-}
-
-tasks.register('assembleDemoRelease') {
-    dependsOn ":divkit-demo-app:assembleRelease"
-}
-
-tasks.register('assembleDemoReleaseBundle') {
-    dependsOn ":divkit-demo-app:bundleRelease"
-}
-
-tasks.register('finalVerification') {
-    dependsOn unitTests
 }
 
 FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {

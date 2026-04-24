@@ -1,3 +1,32 @@
+## 32.46.0
+
+# Android Client:
+* Async binding no longer triggers if the DivData hasn't changed.
+* Fixed alpha restoring at the end of fade animation in set of animations with different durations.
+* Fixed memory leak in case when `Div2View` is destroyed earlier than corresponding `Div2Context`.
+* Headers are now important for accessibility.
+* Supported custom typed actions.
+* Supported reset of persistent variables and data in `DivStorage`.
+* Supported typed action `scroll_to` with destination `item_id` and corresponding `scroll_to_item_id` action url.
+
+# iOS Client:
+* Fixed a flickering issue in overlap container during transition animations caused by offscreen rendering.
+* Fixed remote image distortion in wrap_content mode by using image size in points (scale = 1) for intrinsic layout.
+
+# Web Client:
+* Added `set_cursor_position` action.
+* Updated `slider` ticks limits logic, the maximum number of ticks is now 1000.
+
+
+## 32.45.0
+
+# Android Client:
+* Fixed `Div2View` self locks at async bindng.
+
+# iOS Client:
+* Div-video `preview` strings (base64 image data, including `data:` URL form) are decoded on a background queue through the image holder pipeline instead of blocking layout on the main thread.
+
+
 ## 32.44.0
 
 # Android Client:

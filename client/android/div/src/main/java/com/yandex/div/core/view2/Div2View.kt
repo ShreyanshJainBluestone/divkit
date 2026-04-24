@@ -11,6 +11,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
@@ -295,8 +296,16 @@ class Div2View private constructor(
         data: DivData?,
         tag: DivDataTag,
         onComplete: ((Boolean) -> Unit)?,
-    ): Unit = bindingDispatcher.runOnBindingThread(onComplete) {
-        setDataInternal(data, divData, tag)
+    ) {
+        if (data === divData) {
+            loadMedia()
+            onComplete?.invoke(true)
+            return
+        }
+
+        bindingDispatcher.runOnBindingThread(onComplete) {
+            setDataInternal(data, divData, tag)
+        }
     }
 
     @ExperimentalApi
@@ -305,8 +314,16 @@ class Div2View private constructor(
         oldDivData: DivData?,
         tag: DivDataTag,
         onComplete: ((Boolean) -> Unit)?,
-    ): Unit = bindingDispatcher.runOnBindingThread(onComplete) {
-        setDataInternal(data, oldDivData ?: divData, DivDataTag(tag.id))
+    ) {
+        if (data === divData) {
+            loadMedia()
+            onComplete?.invoke(true)
+            return
+        }
+
+        bindingDispatcher.runOnBindingThread(onComplete) {
+            setDataInternal(data, oldDivData ?: divData, DivDataTag(tag.id))
+        }
     }
 
     fun setData(
@@ -1155,6 +1172,7 @@ class Div2View private constructor(
 
     override fun getConfig(): DivViewConfig = config
 
+    @AnyThread
     override fun getDivTag(): DivDataTag = dataTag
 
     override fun subscribe(

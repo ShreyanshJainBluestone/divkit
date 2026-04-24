@@ -6,6 +6,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeIsConstrained
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivGallery
@@ -17,10 +18,10 @@ internal fun DivGalleryView(
     data: DivGallery,
 ) {
     val orientation = data.orientation.observedValue()
-    val itemSpacingDp = data.itemSpacing.observedValue().toDp()
+    val itemSpacing = data.itemSpacing.observedValue().toDp()
     val crossContentAlignment = data.crossContentAlignment.observedValue()
-    val columnCount = data.columnCount?.observedValue()?.toInt() ?: 1
-    val defaultItem = data.defaultItem.observedValue().toInt()
+    val columnCount = data.columnCount?.observedIntValue() ?: 1
+    val defaultItem = data.defaultItem.observedIntValue()
     val contentPadding = data.paddings.observeInsets()
 
     val items = data.items.orEmpty().filter {
@@ -33,8 +34,8 @@ internal fun DivGalleryView(
             items = items,
             orientation = orientation,
             columnCount = columnCount,
-            itemSpacingDp = itemSpacingDp,
-            crossSpacingDp = data.crossSpacing?.observedValue()?.toDp() ?: itemSpacingDp,
+            itemSpacing = itemSpacing,
+            crossSpacing = data.crossSpacing?.observedValue()?.toDp() ?: itemSpacing,
             crossContentAlignment = crossContentAlignment,
             contentPadding = contentPadding,
             defaultItem = defaultItem,
@@ -47,7 +48,7 @@ internal fun DivGalleryView(
             modifier = if (isScrollable) modifier.constrainScrollAxis(isHorizontal) else modifier,
             items = items,
             orientation = orientation,
-            itemSpacingDp = itemSpacingDp,
+            itemSpacing = itemSpacing,
             crossContentAlignment = crossContentAlignment,
             contentPadding = contentPadding,
             defaultItem = defaultItem,

@@ -11,12 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.reporter
-import com.yandex.div.compose.context.LocalDivContext
 import com.yandex.div.compose.utils.divContext
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
@@ -31,9 +32,9 @@ internal fun Modifier.actions(data: Div): Modifier {
     }
 
     val actionHandler = divContext.component.actionHandler
-    val actionHandlingContext = LocalDivContext.current.actionHandlingContext
+    val actionHandlingContext = LocalComponent.current.actionHandlingContext
     val onClick: () -> Unit = {
-        actionHandler.handle(actionHandlingContext, actions)
+        actionHandler.handle(actionHandlingContext, actions, source = DivActionSource.TAP)
     }
 
     return when (val name = actionParams.animation.name.observedValue()) {
@@ -53,7 +54,7 @@ internal fun Modifier.actions(data: Div): Modifier {
         DivAnimation.Name.SCALE,
         DivAnimation.Name.SET,
         DivAnimation.Name.TRANSLATE -> {
-            reporter.reportError("Animation not supported: $name")
+            reportError("Animation not supported: $name")
             clickable(indication = null, interactionSource = null, onClick = onClick)
         }
     }

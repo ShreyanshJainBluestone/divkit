@@ -1,14 +1,14 @@
 package com.yandex.div.compose
 
-import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.yandex.div.compose.actions.DivExternalActionHandler
+import com.yandex.div.compose.custom.DivCustomEnvironment
+import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.dagger.Names
-import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
-import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.annotations.ExperimentalApi
-import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
@@ -22,7 +22,7 @@ import javax.inject.Named
  *    val configuration = DivComposeConfiguration(
  *        reporter = MyReporter()
  *    )
- *    val divContext = configuration.createContext(baseContext = activity)
+ *    val divContext = DivContext(baseContext = activity, configuration = configuration)
  *    ComposeView(divContext).setContent {
  *        DivView(data = data)
  *    }
@@ -34,8 +34,7 @@ class DivComposeConfiguration(
     val actionHandler: DivExternalActionHandler = defaultActionHandler,
 
     @get:Provides
-    @property:InternalApi
-    val debugConfiguration: DivDebugConfiguration = DivDebugConfiguration(),
+    val customViewFactory: DivCustomViewFactory = defaultCustomViewFactory,
 
     @get:Provides
     val fontFamilyProvider: DivFontFamilyProvider = defaultFontFamilyProvider,
@@ -48,15 +47,15 @@ class DivComposeConfiguration(
     val variableController: DivVariableController = DivVariableController(),
 )
 
-fun DivComposeConfiguration.createContext(baseContext: Context): DivContext {
-    val contextComponent = `Yatagan$DivContextComponent`.builder()
-        .baseContext(baseContext)
-        .configuration(this)
-        .build()
-    return DivContext(contextComponent)
-}
-
 private val defaultActionHandler = object : DivExternalActionHandler {}
+
+private val defaultCustomViewFactory = object : DivCustomViewFactory {
+    @Composable
+    override fun Content(
+        environment: DivCustomEnvironment,
+        modifier: Modifier,
+    ) = Unit
+}
 
 private val defaultFontFamilyProvider = object : DivFontFamilyProvider {
     override fun getFontFamily(fontFamilyName: String?, weight: FontWeight): FontFamily {

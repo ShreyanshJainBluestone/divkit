@@ -361,8 +361,13 @@ export interface ActionScrollToDestinationEnd {
     type: 'end';
 }
 
+export interface ActionScrollToDestinationItemId {
+    type: 'item_id';
+    value: string;
+}
+
 export type ActionScrollToDestination = ActionScrollToDestinationOffset | ActionScrollToDestinationIndex |
-    ActionScrollToDestinationStart | ActionScrollToDestinationEnd;
+    ActionScrollToDestinationStart | ActionScrollToDestinationEnd | ActionScrollToDestinationItemId;
 
 export interface ActionScrollTo {
     type: 'scroll_to';
@@ -382,11 +387,21 @@ export interface ActionCustom {
     type: 'custom';
 }
 
+export interface ActionSetCursorPosition {
+    type: 'set_cursor_position';
+    id: string;
+    position: {
+        type: 'absolute';
+        start: number;
+        end?: number;
+    };
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
     ActionVideo | ActionStore | ActionSetState | ActionSubmit | ActionScrollBy | ActionScrollTo |
-    ActionUpdateStructure | ActionCustom;
+    ActionUpdateStructure | ActionCustom | ActionSetCursorPosition;
 
 export interface ActionBase {
     log_id: string;

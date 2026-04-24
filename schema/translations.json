@@ -96,8 +96,8 @@
     "ru": "Referer-ссылка для логирования."
   },
   "div_action_base_scope_id": {
-    "en": "The ID of the element within which the specified action will be performed.",
-    "ru": "Идентификатор элемента, в области видимости которого будет выполняться данное действие."
+    "en": "The ID of the element whose scope will be used for changing variable values when the action is performed.",
+    "ru": "Идентификатор элемента, в области видимости которого будут изменяться значения переменных при выполнении действия."
   },
   "div_action_base_url": {
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).",
@@ -179,6 +179,14 @@
     "en": "Specifies the end of the container as the scrolling end position.",
     "ru": "Указывает конец контейнера как конечную точку пролистывания."
   },
+  "div_action_scroll_destination_item_id": {
+    "en": "Specifies the element with the given `id` as the scrolling end position.",
+    "ru": "Указывает элемент с заданным `id` как конечную точку пролистывания."
+  },
+  "div_action_scroll_destination_item_id_value": {
+    "en": "Identifier of the container child element to scroll to.",
+    "ru": "Идентификатор дочернего элемента контейнера, к которому нужно пролистать."
+  },
   "div_action_scroll_destination_index": {
     "en": "Specifies the element with the given index as the scrolling end position.",
     "ru": "Указывает элемент с заданным индексом как конечную точку пролистывания."
@@ -212,8 +220,20 @@
     "ru": "Выполняет скролл к позиции или переключает элемент в контейнере на указанный параметром `destination`."
   },
   "div_action_scroll_to_destination": {
-    "en": "Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>",
-    "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
+    "en": "Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>",
+    "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`item_id` — пролистывание до элемента с идентификатором, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
+  },
+  "div_action_set_cursor_position": {
+    "en": "Sets the cursor position in the specified input field.",
+    "ru": "Устанавливает позицию курсора в указанном поле ввода."
+  },
+  "div_action_set_cursor_position_id": {
+    "en": "ID of the input field.",
+    "ru": "ID поля ввода."
+  },
+  "div_action_set_cursor_position_position": {
+    "en": "Defines the cursor position. If `end` is not set, or if `end` is equal to `start`, it will just be the cursor position, if both are set and the values are different, part of the text will be selected. Use 0 to indicate the beginning of the text, -1 for the end.",
+    "ru": "Определяет позицию курсора. Если `end` не задано или если `end` равно `start` - будет просто позиция курсора, если оба заданы и значения разные - будет выделена часть текста. Для указания начала текста используйте 0, для конца - -1."
   },
   "div_action_set_state": {
     "en": "Applies a new appearance to the content in `div-state'.",
@@ -242,6 +262,10 @@
   "div_action_set_stored_value_value": {
     "en": "Saved value.",
     "ru": "Сохраняемое значение."
+  },
+  "div_action_set_stored_value_scope": {
+    "en": "Scope of the stored variable:<li>`global` — not bound to a specific card (available for any card);</li><li>`card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement saving variables for that scope.</li>/nDefault value for Android and iOS is `global'. For Web, the implementation depends entirely on the developer.",
+    "ru": "Область видимости сохраняемой переменной:<li>`global` — не привязана к конкретной карточке (доступна для любой);</li><li>`card` — привязана к текущей карточке. На Android карточка задаётся с помощью `DivDataTag`, на iOS — параметром `cardId`, в Web значение области видимости передаётся в `Store`, сохранение переменных для этой области реализует разработчик, интегрирующий DivKit.</li>/nЗначение по умолчанию для Android и iOS - `global`, для Web реализация полностью зависит от разработчика."
   },
   "div_action_set_variable": {
     "en": "Assigns a value to the variable",

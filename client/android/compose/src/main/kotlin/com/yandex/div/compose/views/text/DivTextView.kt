@@ -10,12 +10,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextOverflow
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
+import com.yandex.div.compose.utils.observedColorValue
+import com.yandex.div.compose.utils.observedIntValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toAlignment
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 
@@ -25,15 +27,19 @@ internal fun DivTextView(
     data: DivText
 ) {
     val text = data.text.observedValue()
-    val fontSize = data.fontSize.observedValue()
+    val fontSize = data.fontSize.observedIntValue()
     val selectable = data.selectable.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
+    val hyphens = if (SOFT_HYPHEN in text) Hyphens.Auto else Hyphens.None
 
-    val textStyle = data.observeTextStyle(fontSize, textAlignmentHorizontal)
-    val maxLines = data.maxLines?.observedValue()?.toInt()?.coerceAtLeast(1)
-        ?: Int.MAX_VALUE
-    val overflow = data.truncate.observedValue().toTextOverflow()
+    val textStyle = data.observeTextStyle(fontSize, textAlignmentHorizontal, hyphens)
+    val maxLines = data.maxLines?.observedIntValue()?.coerceAtLeast(1) ?: Int.MAX_VALUE
+    val overflow = if (data.maxLines != null) {
+        data.truncate.observedValue().toTextOverflow()
+    } else {
+        TextOverflow.Clip
+    }
 
     val contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical)
     val annotatedString = buildAnnotatedText(text, data, fontSize)
@@ -63,7 +69,7 @@ internal fun DivTextView(
 private fun buildAnnotatedText(
     text: String,
     data: DivText,
-    baseFontSize: Long,
+    baseFontSize: Int,
 ): AnnotatedString {
     val gradientBrush = data.observeTextGradient()
     val ranges = data.ranges
@@ -72,7 +78,7 @@ private fun buildAnnotatedText(
         return AnnotatedString(text)
     }
 
-    val baseTextColorAlpha = data.textColor.observedValue().toColor().alpha
+    val baseTextColorAlpha = data.textColor.observedColorValue().alpha
     val density = LocalDensity.current
     val builder = AnnotatedString.Builder(text)
 
@@ -82,8 +88,8 @@ private fun buildAnnotatedText(
 
     if (ranges != null) {
         for (range in ranges) {
-            val start = range.start.observedValue().toInt()
-            val end = range.end?.observedValue()?.toInt() ?: text.length
+            val start = range.start.observedIntValue()
+            val end = range.end?.observedIntValue() ?: text.length
             val safeStart = start.coerceIn(0, text.length)
             val safeEnd = end.coerceIn(safeStart, text.length)
             if (safeStart >= safeEnd) continue
@@ -114,3 +120,5 @@ private fun DivText.observeTextGradient(): Brush? {
         is DivTextGradient.Radial -> textGradient.value.observeRadialGradient()
     }
 }
+
+private const val SOFT_HYPHEN = '\u00AD'

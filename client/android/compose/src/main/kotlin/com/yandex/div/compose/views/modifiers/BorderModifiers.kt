@@ -16,8 +16,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.utils.observedColorValue
+import com.yandex.div.compose.utils.observedFloatValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivBorder
@@ -25,16 +26,16 @@ import com.yandex.div2.DivStroke
 import com.yandex.div2.DivStrokeStyle
 
 @Composable
-internal fun Modifier.divBorderClip(data: DivBorder): Modifier {
+internal fun Modifier.borderClip(data: DivBorder): Modifier {
     val shape = data.toShape()
     return if (shape == RectangleShape) this else clip(shape)
 }
 
 @Composable
-internal fun Modifier.divBorderStroke(data: DivBorder): Modifier {
+internal fun Modifier.borderStroke(data: DivBorder): Modifier {
     val stroke = data.stroke ?: return this
     val shape = data.toShape()
-    return divBorderStrokeWithShape(stroke, shape)
+    return borderStrokeWithShape(stroke, shape)
 }
 
 @Composable
@@ -54,8 +55,8 @@ private fun DivBorder.toShape(): Shape {
 }
 
 @Composable
-private fun Modifier.divBorderStrokeWithShape(stroke: DivStroke, shape: Shape): Modifier {
-    val color = stroke.color.observedValue().toColor()
+private fun Modifier.borderStrokeWithShape(stroke: DivStroke, shape: Shape): Modifier {
+    val color = stroke.color.observedColorValue()
     val width = stroke.widthToDp()
     return when (stroke.style) {
         is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
@@ -65,8 +66,7 @@ private fun Modifier.divBorderStrokeWithShape(stroke: DivStroke, shape: Shape): 
 
 @Composable
 private fun DivStroke.widthToDp(): Dp {
-    val widthValue = width.observedValue().toFloat()
-    return widthValue.toDp(unit.observedValue())
+    return width.observedFloatValue().toDp(unit.observedValue())
 }
 
 @Composable

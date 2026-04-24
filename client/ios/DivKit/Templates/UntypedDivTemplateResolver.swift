@@ -73,32 +73,36 @@ final class UntypedDivTemplateResolver {
 
   private func resolveLinks(
     in dictionary: [String: Any],
-    linkSource: [String: Any]
+    linkSource: [String: Any]?
   ) -> [String: Any] {
     var dict = dictionary
+    var linkFieldNames = Set<String>()
     let linkKeys = dict.keys.filter { $0.hasPrefix("$") }
     for linkKey in linkKeys {
       let key = String(linkKey.dropFirst())
-      guard dict[key] == nil else { continue }
+      linkFieldNames.insert(key)
       guard let linkName = dict[linkKey] as? String else { continue }
-      guard let value = linkSource[linkName] else { continue }
+      guard dict[key] == nil else { continue }
+      guard let value = linkSource?[linkName] else { continue }
       dict[key] = value
     }
 
     var result: [String: Any] = [:]
     for (key, value) in dict {
       guard !key.hasPrefix("$") else { continue }
-      result[key] = resolveLinksInValue(value, linkSource: linkSource)
+      let childSource: [String: Any]? = linkFieldNames.contains(key) ? nil : linkSource
+      result[key] = resolveLinksInValue(value, linkSource: childSource)
     }
     return result
   }
 
   private func resolveLinksInValue(
     _ value: Any,
-    linkSource: [String: Any]
+    linkSource: [String: Any]?
   ) -> Any {
     if let dict = value as? [String: Any] {
-      if let type = dict["type"] as? String,
+      if let linkSource,
+         let type = dict["type"] as? String,
          let resolvedTemplate = resolveTemplate(named: type).value {
         var parameterNames = collectParameterNames(from: resolvedTemplate)
         parameterNames.formUnion(
@@ -141,7 +145,7 @@ final class UntypedDivTemplateResolver {
     }
 
     for paramName in parameterNames {
-      if result[paramName] == nil, let value = linkSource[paramName] {
+      if let value = linkSource[paramName] {
         result[paramName] = value
       }
     }
